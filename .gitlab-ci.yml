@@ -14,7 +14,7 @@ version:
     - echo "hi"
     # - sed '/version/s/[^.]*$/'"$BUILD_NUMBER\",/" package.json > _package.json && mv _package.json package.json
     # - jq '.version = "${BUILD_NUMBER}"' package.json > package.json
-    - apt-get update && apt-get install --yes jq
+    - apt-get update && apt-get install --yes jq git
     - export VERSION=$(cat package.json | jq -r .version)
     - export CURRENT_TAG=$(git tag -l --contains HEAD)
     - |
