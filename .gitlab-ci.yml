@@ -1,5 +1,5 @@
 
-
+ 
 stages:
   - version
  
@@ -8,6 +8,7 @@ variables:
   BUILD_NUMBER: '1.0.0.$CI_PIPELINE_ID'
 
 version:
+  image: node:12.16.2-stretch-slim
   stage: version
   script:
     - echo "hi"
