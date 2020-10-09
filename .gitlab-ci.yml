@@ -1,0 +1,27 @@
+
+stages:
+  - version
+ 
+
+variables:
+  BUILD_NUMBER: '1.0.0.$CI_PIPELINE_ID'
+
+version:
+  image: node:12.16.2-stretch-slim
+  stage: version
+  script:
+    - echo "hi"
+    # - sed '/version/s/[^.]*$/'"$BUILD_NUMBER\",/" package.json > _package.json && mv _package.json package.json
+    # - jq '.version = "${BUILD_NUMBER}"' package.json > package.json
+    - apt-get install --yes jq
+    - export VERSION=$(cat package.json | jq -r .version)
+    - export CURRENT_TAG=$(git tag -l --contains HEAD)
+    - |
+      if [ "$CURRENT_TAG" != "v$VERSION" ]; then
+        echo "Current tag $CURRENT_TAG does not match version $VERSION"
+        exit 1
+      fi
+    - export CURRENT_VERSION=$(git rev-parse HEAD --short)
+    - node -e "let p = require('./package.json'); p.version = p.version + '-dev$CURRENT_VERSION'; console.log(JSON.stringify(p, 1, 2))" > package.json.new
+    - mv package.json.new package.json
+
