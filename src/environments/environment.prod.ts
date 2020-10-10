@@ -1,4 +1,6 @@
+import { VERSION } from './version';
+
 export const environment = {
   production: true,
-  appVersion: require('../../package.json').version,
+  appVersion: VERSION.version,
 };

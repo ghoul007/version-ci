@@ -3,13 +3,14 @@
   "version": "21.0.1",
   "scripts": {
     "ng": "ng",
-    "start": "npm run version && ng serve --port 4201",
+    "start": "ng serve --port 4201",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "release": "release-it",
-    "version": "node ./package.version.js"
+    "prestart": "node ./scripts/version.js",
+    "prebuild": "node ./scripts/version.js"
   },
   "private": true,
   "dependencies": {
@@ -21,6 +22,7 @@
     "@angular/platform-browser": "~9.1.11",
     "@angular/platform-browser-dynamic": "~9.1.11",
     "@angular/router": "~9.1.11",
+    "git-describe": "^4.0.4",
     "release-it": "^14.0.3",
     "replace-in-file": "^6.1.0",
     "rxjs": "~6.5.4",
