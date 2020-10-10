@@ -1,13 +1,14 @@
 {
   "name": "demo",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "release": "release-it"
   },
   "private": true,
   "dependencies": {
@@ -21,7 +22,8 @@
     "@angular/router": "~9.1.11",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
-    "zone.js": "~0.10.2"
+    "zone.js": "~0.10.2",
+    "release-it": "^14.0.3"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.901.9",

@@ -1,0 +1,24 @@
+
+{
+    "pkgFiles": ["package.json"],
+
+    "git": {
+        "requireCleanWorkingDir": false,
+        "commitMessage": "Release v${version}",
+        "tagAnnotation": "Release v${version}",
+        "addUntrackedFiles": true,
+        "changelog": "npx auto-changelog --stdout --commit-limit false -u --template https://raw.githubusercontent.com/release-it/release-it/master/templates/changelog-compact.hbs"
+    },
+    "npm": {
+      "publish": false,
+      "tag": "latest"
+    },
+    "github": {
+      "release": false,
+      "releaseName": "v${version}",
+      "tokenRef": "GITHUB_ACCESS_TOKEN"
+    },
+    "hooks": {
+      "after:bump": "npx auto-changelog -p"
+    }
+  }

@@ -1,0 +1,53 @@
+diff --git a/.release-it.json b/.release-it.json
+new file mode 100644
+index 0000000..d8ad7ad
+--- /dev/null
++++ b/.release-it.json
+@@ -0,0 +1,24 @@
++
++{
++    "pkgFiles": ["package.json"],
++
++    "git": {
++        "requireCleanWorkingDir": true,
++        "commitMessage": "Release v${version}",
++        "tagAnnotation": "Release v${version}",
++        "addUntrackedFiles": true,
++        "changelog": "npx auto-changelog --stdout --commit-limit false -u --template https://raw.githubusercontent.com/release-it/release-it/master/templates/changelog-compact.hbs"
++    },
++    "npm": {
++      "publish": false,
++      "tag": "latest"
++    },
++    "github": {
++      "release": false,
++      "releaseName": "v${version}",
++      "tokenRef": "GITHUB_ACCESS_TOKEN"
++    },
++    "hooks": {
++      "after:bump": "npx auto-changelog -p"
++    }
++  }
+\ No newline at end of file
+diff --git a/package.json b/package.json
+index 94afc57..0487dee 100644
+--- a/package.json
++++ b/package.json
+@@ -46,7 +46,8 @@
+     "sed-catalina": "sed -i -e 's/\r$//' services/tomcat/config/catalina.sh",
+     "postinstall": "npm-run-all --parallel sed-postgres sed-tomcat sed-catalina",
+     "start-config": "npx tsc -p script/tsconfig.json  -w",
+-    "start-env": "node script/dist/chooseConfig.js"
++    "start-env": "node script/dist/chooseConfig.js",
++    "release": "release-it"
+   },
+   "keywords": [],
+   "author": "dev",
+@@ -71,6 +72,7 @@
+     "@types/inquirer": "^7.3.0",
+     "npm-run-all": "^4.1.5",
+     "open-cli": "^6.0.1",
++    "release-it": "^14.0.3",
+     "wait-for-localhost-cli": "^1.1.0",
+     "wait-npm": "1.0.0"
+   }
