@@ -1,0 +1,82 @@
+version: '3'
+
+networks:
+  devsecops:
+    ipam:
+      config:
+        - subnet: 10.0.85.0/24
+
+volumes:
+  gitlab-cfg:
+    external: false
+  gitlab-log:
+    external: false
+  gitlab-opt:
+    external: false
+  runner-data:
+    external: false
+
+services:
+  traefik:
+    # image: "traefik@sha256:b45214fe976f562a2960b31d651937ff0b38096a5e190aa054ccd0d731c6999f"
+    image: "traefik:latest"
+    container_name: "traefik.devsecops.lab"
+    hostname: traefik.devsecops.lab
+    command:
+      - "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.http.address=:80"
+    ports:
+      - "80:80"
+      - "8060:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    networks:
+      devsecops:
+         ipv4_address: 10.0.85.5
+         
+  gitlab:
+    # image: gitlab/gitlab-ee@sha256:cc9f61079b4a1f0cc12d40cbd3427bb7585409d6730e56987180ac6bccf04ef8
+    image: gitlab/gitlab-ee
+    container_name: gitlab.devsecops.lab
+    hostname: gitlab.devsecops.lab
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.gitlab.entrypoints=http"
+      - "traefik.http.routers.gitlab.rule=Host(`gitlab.devsecops.lab`)"
+      - "traefik.http.routers.gitlab.service=gitlab"
+      - "traefik.http.services.gitlab.loadbalancer.server.port=80"
+    volumes:
+      - './hosts:/etc/hosts'
+      - 'gitlab-cfg:/etc/gitlab'
+      - 'gitlab-log:/var/log/gitlab'
+      - 'gitlab-opt:/var/opt/gitlab'
+    ports:
+      - '2222:22'
+      - '4567:4567'
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        nginx['listen_port'] = 80 
+        external_url 'http://gitlab.devsecops.lab'
+        gitlab_rails['gitlab_shell_ssh_port'] = 2222
+        gitlab_rails['initial_root_password'] = 'ghoul123'
+    networks:
+      devsecops:
+         ipv4_address: 10.0.85.10
+
+  runner:
+    # image: gitlab/gitlab-runner@sha256:fa5da5099bb9e952411827dcc26eb1f02128d6528596f13c75736fc33d5bd245
+    image: gitlab/gitlab-runner:alpine
+    container_name: runner.devsecops.lab
+    hostname: runner.devsecops.lab
+    volumes:
+      - './hosts:/etc/hosts'
+      - 'runner-data:/etc/gitlab-runner:Z'
+      - '/var/run/docker.sock:/var/run/docker.sock'
+    networks:
+      devsecops:
+         ipv4_address: 10.0.85.11
+
