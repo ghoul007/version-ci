@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  appVersion: require('../../package.json').version,
+  appVersion: '21.0.0-dev10-10-2020 21:41:1'
 };
 
 /*
