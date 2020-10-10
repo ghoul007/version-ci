@@ -18,18 +18,18 @@ version:
     - export VERSION=$(cat package.json | jq -r .version)
     - export CURRENT_TAG=$(git tag -l --contains HEAD)
     - echo "CURRENT_TAG=$CURRENT_TAG and version=$VERSION"
-    - |
-      if [ "$CURRENT_TAG" != "$VERSION" ]; then
-        echo "Current tag $CURRENT_TAG does not match version $VERSION"
-        exit 1
-      fi
+    # - |
+    #   if [ "$CURRENT_TAG" != "$VERSION" ]; then
+    #     echo "Current tag $CURRENT_TAG does not match version $VERSION"
+    #     exit 1
+    #   fi
     - export CURRENT_VERSION=$(git rev-parse HEAD --short)
     - node -e "let p = require('./package.json'); p.version = p.version + '-dev$CURRENT_VERSION'; console.log(JSON.stringify(p, 1, 2))" > package.json.new
     - mv package.json.new package.json
     - cat package.json | jq .version
     - npm install
     - npm start
-  only:
-    - tags
+  # only:
+  #   - tags
   tags:
     - angular
