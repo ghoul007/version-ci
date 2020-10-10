@@ -27,4 +27,7 @@ version:
     - node -e "let p = require('./package.json'); p.version = p.version + '-dev$CURRENT_VERSION'; console.log(JSON.stringify(p, 1, 2))" > package.json.new
     - mv package.json.new package.json
     - cat package.json | jq .version
+    - npm start
 
+  tags:
+      - angular
