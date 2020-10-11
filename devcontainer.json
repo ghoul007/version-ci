@@ -1,0 +1,28 @@
+{
+	"name": "Angular-DEV",
+	"build":{
+		"dockerfile": "Dockerfile",
+		"context": "..",
+		"args": {
+			"ANGULAR": "9.1",
+			"NODE": "14.3"
+		}
+	},
+
+	"settings": {
+		"terminal.integrated.shell.linux": "/bin/bash"
+	},
+
+	"appPort": [4202],
+
+	"postCreateCommand": "",
+
+	"remoteUser": "node",
+
+	"extensions": [
+		"github.vscode-pull-request-github",
+		"angular.ng-template",
+		"ms-vscode.vscode-typescript-tslint-plugin",
+		"redhat.vscode-yaml"
+	]
+}
